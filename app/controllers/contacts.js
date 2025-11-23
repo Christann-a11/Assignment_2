@@ -1,8 +1,9 @@
 let ContactModel = require('../models/contacts');
 
+// Get a single contact
 module.exports.getContact = async function (req, res, next) {
   try {
-    let contact = await ContactModel.findOne({ _id: req.params.contactId });
+    const contact = await ContactModel.findById(req.params.contactId);
     res.json(contact);
   } catch (error) {
     console.log(error);
@@ -10,23 +11,26 @@ module.exports.getContact = async function (req, res, next) {
   }
 };
 
+// Create a new contact
 module.exports.create = async function (req, res, next) {
   try {
-    let contact = req.body;
-    let result = await ContactModel.create(contact);
-    console.log(result);
+    const contact = await ContactModel.create(req.body);
 
-    res.status(200);
-    res.json({ success: true, message: "Contact created successfully." });
+    res.status(201).json({
+      success: true,
+      message: "Contact created successfully.",
+      data: contact
+    });
   } catch (error) {
     console.log(error);
     next(error);
   }
 };
 
+// Get all contacts
 module.exports.getAll = async function (req, res, next) {
   try {
-    let list = await ContactModel.find();
+    const list = await ContactModel.find();
     res.json(list);
   } catch (error) {
     console.log(error);
@@ -34,36 +38,47 @@ module.exports.getAll = async function (req, res, next) {
   }
 };
 
+// Update a contact
 module.exports.update = async function (req, res, next) {
   try {
-    let updatedContact = ContactModel(req.body);
-    updatedContact._id = req.params.contactId;
-    let result = await ContactModel.updateOne({ _id: req.params.contactId }, updatedContact);
-    console.log(result);
+    const updatedContact = await ContactModel.findByIdAndUpdate(
+      req.params.contactId,
+      req.body,
+      { new: true }
+    );
 
-    if (result.modifiedCount > 0) {
-      res.status(200);
-      res.json({ success: true, message: "Contact updated successfully." });
-    } else {
-      throw new Error('Contact not updated. Are you sure it exists?');
-    }
+    if (!updatedContact) {
+      return res.status(404).json({
+        success: false,
+        message: "Contact not found."
+      });
+    }n
+
+    res.status(200).json(updatedContact);
+
   } catch (error) {
     console.log(error);
     next(error);
   }
 };
 
+// Delete a contact
 module.exports.remove = async function (req, res, next) {
   try {
-    let result = await ContactModel.deleteOne({ _id: req.params.contactId });
-    console.log(result);
+    const result = await ContactModel.deleteOne({ _id: req.params.contactId });
 
     if (result.deletedCount > 0) {
-      res.status(200);
-      res.json({ success: true, message: "Contact deleted successfully." });
+      res.status(200).json({
+        success: true,
+        message: "Contact deleted successfully."
+      });
     } else {
-      throw new Error('Contact not deleted. Are you sure it exists?');
+      res.status(404).json({
+        success: false,
+        message: "Contact not found."
+      });
     }
+
   } catch (error) {
     console.log(error);
     next(error);
@@ -71,16 +86,15 @@ module.exports.remove = async function (req, res, next) {
 };
 
 // Delete all contacts
-
 module.exports.removeAll = async function (req, res, next) {
   try {
     const result = await ContactModel.deleteMany({});
-    console.log(result);
 
     res.status(200).json({
       success: true,
       message: `All contacts deleted successfully. Total deleted: ${result.deletedCount}`
     });
+
   } catch (error) {
     console.error(error);
     next(error);

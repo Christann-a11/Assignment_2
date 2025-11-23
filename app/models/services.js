@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const ServiceSchema = new Schema(
   {
     title: String,
+    price: Number,
     description: String
   },
   { collection: "services" }

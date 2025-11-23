@@ -36,17 +36,21 @@ module.exports.getAll = async function (req, res, next) {
 
 module.exports.update = async function (req, res, next) {
   try {
-    let updatedProject = ProjectModel(req.body);
-    updatedProject._id = req.params.projectId;
-    let result = await ProjectModel.updateOne({ _id: req.params.projectId }, updatedProject);
-    console.log(result);
+    const updatedProject = await ProjectModel.findByIdAndUpdate(
+      req.params.projectId,
+      req.body,
+      { new: true }  
+    );
 
-    if (result.modifiedCount > 0) {
-      res.status(200);
-      res.json({ success: true, message: "Project updated successfully." });
-    } else {
-      throw new Error('Project not updated. Are you sure it exists?');
+    if (!updatedProject) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found."
+      });
     }
+
+    res.status(200).json(updatedProject);
+
   } catch (error) {
     console.log(error);
     next(error);

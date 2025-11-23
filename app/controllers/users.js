@@ -26,9 +26,12 @@ module.exports.create = async function (req, res, next) {
       success: true,
       message: "User created successfully.",
       data: {
-        id: result._id,          // <-- Include the MongoDB ID
+        _id: result._id,          // <-- Include the MongoDB ID
         username: result.username,
-        email: result.email
+        email: result.email,
+        firstName: result.firstName,
+        lastName: result.lastName,
+        role: result.role
       }
     });
   } catch (error) {
