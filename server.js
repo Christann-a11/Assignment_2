@@ -10,8 +10,11 @@ var indexRouter = require('./app/routes/index');
 var contactRouter = require('./app/routes/contacts');
 var projectRouter = require('./app/routes/projects');
 var serviceRouter = require('./app/routes/services');
+<<<<<<< HEAD
 var authRouter = require('./app/routes/auth.routes');
 
+=======
+>>>>>>> 9ca08161849e86f9901efd5e4cb5bf18ac0035d1
 
 var app = express();
 
@@ -26,13 +29,19 @@ app.use(logger('dev'));
 
 // Routes
 app.use('/', indexRouter);
+<<<<<<< HEAD
 app.use('/api/auth', authRouter);
+=======
+>>>>>>> 9ca08161849e86f9901efd5e4cb5bf18ac0035d1
 app.use('/api/users', userRouter);
 app.use('/api/contacts', contactRouter);
 app.use('/api/projects', projectRouter);
 app.use('/api/services', serviceRouter);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9ca08161849e86f9901efd5e4cb5bf18ac0035d1
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404, 'Not Found'));

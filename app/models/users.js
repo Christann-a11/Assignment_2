@@ -16,10 +16,13 @@ const UserSchema = new Schema(
       required: 'Username is required',
       trim: true
     },
+<<<<<<< HEAD
     password: {
       type: String,
       required: 'Password is required'
     },
+=======
+>>>>>>> 9ca08161849e86f9901efd5e4cb5bf18ac0035d1
     role: {
       type: String,
       default: "User"
